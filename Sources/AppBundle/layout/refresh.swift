@@ -190,13 +190,9 @@ private let sizeTolerance: CGFloat = 5.0
 @MainActor
 private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws {
     for (app, windowIds) in mapping {
-        // Skip windows already in tab groups
-        let ungroupedWindowIds = windowIds.filter { TabGroupTracker.getGroup(for: $0) == nil }
-        if ungroupedWindowIds.count < 2 { continue }
-
-        // Get positions for all ungrouped windows
+        // Get positions for all windows (including those in groups, for merging)
         var windowPositions: [(windowId: UInt32, position: CGPoint, size: CGSize)] = []
-        for windowId in ungroupedWindowIds {
+        for windowId in windowIds {
             guard let window = MacWindow.allWindowsMap[windowId] else { continue }
             guard let rect = try? await window.getAxRect() else { continue }
             windowPositions.append((windowId, rect.topLeftCorner, rect.size))
@@ -227,17 +223,44 @@ private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws
 
             // If we found multiple windows at the same position, they're tabs
             if groupWindowIds.count > 1 {
+                // Check if any of these windows is already in a group
+                var existingGroup: TabGroup? = nil
+                for id in groupWindowIds {
+                    if let group = TabGroupTracker.getGroup(for: id) {
+                        existingGroup = group
+                        break
+                    }
+                }
+
                 let focusedWindowId = try await app.getFocusedWindow()?.windowId
-                let activeId = groupWindowIds.contains(focusedWindowId ?? 0) ? focusedWindowId! : groupWindowIds[0]
 
-                let group = TabGroup(activeWindowId: activeId, windowIds: Set(groupWindowIds))
-                TabGroupTracker.registerGroup(group)
+                if let group = existingGroup {
+                    // Merge new windows into the existing group
+                    for id in groupWindowIds where TabGroupTracker.getGroup(for: id) == nil {
+                        TabGroupTracker.addWindowToGroup(id, group: group)
+                        // Move non-active tabs to popup container
+                        if id != group.activeWindowId, let window = MacWindow.allWindowsMap[id] {
+                            window.unbindFromParent()
+                            window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+                        }
+                    }
+                    // Update active window if focused window is in this group
+                    if let focusedId = focusedWindowId, group.windowIds.contains(focusedId), focusedId != group.activeWindowId {
+                        handleTabSwitch(newActiveWindowId: focusedId)
+                    }
+                } else {
+                    // Create a new group
+                    let activeId = groupWindowIds.contains(focusedWindowId ?? 0) ? focusedWindowId! : groupWindowIds[0]
 
-                // Move non-active tabs to popup container
-                for id in groupWindowIds where id != activeId {
-                    if let window = MacWindow.allWindowsMap[id] {
-                        window.unbindFromParent()
-                        window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+                    let group = TabGroup(activeWindowId: activeId, windowIds: Set(groupWindowIds))
+                    TabGroupTracker.registerGroup(group)
+
+                    // Move non-active tabs to popup container
+                    for id in groupWindowIds where id != activeId {
+                        if let window = MacWindow.allWindowsMap[id] {
+                            window.unbindFromParent()
+                            window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+                        }
                     }
                 }
             }
@@ -277,11 +300,17 @@ func handleTabSwitch(newActiveWindowId: UInt32) {
     let oldIndex = oldWindow.ownIndex ?? 0
     let oldAdaptiveWeight = (oldParent as? TilingContainer).map { oldWindow.getWeight($0.orientation) } ?? WEIGHT_AUTO
 
+    // Unbind new window first (from popup container), then unbind old window
+    // This order matters to avoid index issues
+    newWindow.unbindFromParent()
     oldWindow.unbindFromParent()
+
+    // Bind old window to popup container
     oldWindow.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
 
-    newWindow.unbindFromParent()
-    newWindow.bind(to: oldParent, adaptiveWeight: oldAdaptiveWeight, index: oldIndex)
+    // Bind new window to the old position, clamping index to valid range
+    let safeIndex = min(oldIndex, oldParent.children.count)
+    newWindow.bind(to: oldParent, adaptiveWeight: oldAdaptiveWeight, index: safeIndex)
 
     group.setActiveWindow(newActiveWindowId)
 }
