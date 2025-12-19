@@ -159,6 +159,7 @@ private func recordDestroyedWindowInfo(_ window: MacWindow) async {
 
 @MainActor
 private func refreshTabGroups(mapping: [MacApp: [UInt32]]) async throws {
+    // First try AXTabGroup-based detection
     for (app, _) in mapping {
         let tabGroups = try await app.getTabGroupWindowIds()
         for windowIds in tabGroups {
@@ -174,6 +175,70 @@ private func refreshTabGroups(mapping: [MacApp: [UInt32]]) async throws {
                 if let window = MacWindow.allWindowsMap[windowId] {
                     window.unbindFromParent()
                     window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+                }
+            }
+        }
+    }
+
+    // Then try position-based detection for apps that don't expose AXTabGroup (like Ghostty)
+    try await detectTabGroupsByPosition(mapping: mapping)
+}
+
+private let positionTolerance: CGFloat = 5.0
+private let sizeTolerance: CGFloat = 5.0
+
+@MainActor
+private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws {
+    for (app, windowIds) in mapping {
+        // Skip windows already in tab groups
+        let ungroupedWindowIds = windowIds.filter { TabGroupTracker.getGroup(for: $0) == nil }
+        if ungroupedWindowIds.count < 2 { continue }
+
+        // Get positions for all ungrouped windows
+        var windowPositions: [(windowId: UInt32, position: CGPoint, size: CGSize)] = []
+        for windowId in ungroupedWindowIds {
+            guard let window = MacWindow.allWindowsMap[windowId] else { continue }
+            guard let rect = try? await window.getAxRect() else { continue }
+            windowPositions.append((windowId, rect.topLeftCorner, rect.size))
+        }
+
+        // Group windows that have the same position (within tolerance)
+        var processedIds: Set<UInt32> = []
+        for i in 0..<windowPositions.count {
+            let (windowId, position, size) = windowPositions[i]
+            if processedIds.contains(windowId) { continue }
+
+            var groupWindowIds: [UInt32] = [windowId]
+            processedIds.insert(windowId)
+
+            for j in (i+1)..<windowPositions.count {
+                let (otherId, otherPos, otherSize) = windowPositions[j]
+                if processedIds.contains(otherId) { continue }
+
+                if abs(position.x - otherPos.x) <= positionTolerance &&
+                   abs(position.y - otherPos.y) <= positionTolerance &&
+                   abs(size.width - otherSize.width) <= sizeTolerance &&
+                   abs(size.height - otherSize.height) <= sizeTolerance
+                {
+                    groupWindowIds.append(otherId)
+                    processedIds.insert(otherId)
+                }
+            }
+
+            // If we found multiple windows at the same position, they're tabs
+            if groupWindowIds.count > 1 {
+                let focusedWindowId = try await app.getFocusedWindow()?.windowId
+                let activeId = groupWindowIds.contains(focusedWindowId ?? 0) ? focusedWindowId! : groupWindowIds[0]
+
+                let group = TabGroup(activeWindowId: activeId, windowIds: Set(groupWindowIds))
+                TabGroupTracker.registerGroup(group)
+
+                // Move non-active tabs to popup container
+                for id in groupWindowIds where id != activeId {
+                    if let window = MacWindow.allWindowsMap[id] {
+                        window.unbindFromParent()
+                        window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+                    }
                 }
             }
         }
