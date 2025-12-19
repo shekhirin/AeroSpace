@@ -108,8 +108,12 @@ final class MacWindow: Window {
 
         // Handle tab group: if this window is part of a tab group, promote another tab to take its place
         if let group = TabGroupTracker.getGroup(for: windowId) {
+            let wasActiveWindow = windowId == group.activeWindowId
+            let remainingCount = group.windowIds.count - 1
+
             TabGroupTracker.unregisterWindow(windowId)
-            if group.hasMultipleWindows && windowId == group.activeWindowId {
+
+            if remainingCount > 0 && wasActiveWindow {
                 // This was the active tab being closed - promote another tab
                 if let newActiveId = group.windowIds.first,
                    let newActiveWindow = MacWindow.allWindowsMap[newActiveId]
@@ -120,10 +124,12 @@ final class MacWindow: Window {
 
                     newActiveWindow.unbindFromParent()
                     newActiveWindow.bind(to: parent, adaptiveWeight: myWeight, index: myIndex)
-                    group.setActiveWindow(newActiveId)
+                    if remainingCount > 1 {
+                        group.setActiveWindow(newActiveId)
+                    }
                     return
                 }
-            } else if group.hasMultipleWindows {
+            } else if remainingCount > 0 {
                 // This was a background tab - just remove it, no layout changes
                 _ = unbindFromParent()
                 return
