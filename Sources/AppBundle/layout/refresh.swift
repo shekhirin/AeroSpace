@@ -244,10 +244,9 @@ private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws
                             window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
                         }
                     }
-                    // Update active window if focused window is in this group
-                    if let focusedId = focusedWindowId, group.windowIds.contains(focusedId), focusedId != group.activeWindowId {
-                        handleTabSwitch(newActiveWindowId: focusedId)
-                    }
+                    // Note: Don't call handleTabSwitch here for existing groups.
+                    // Tab switches are handled by kAXMainWindowChangedNotification observer.
+                    // Calling it here would interfere with tab close promotions in garbageCollect.
                 } else {
                     // Create a new group
                     let activeId = groupWindowIds.contains(focusedWindowId ?? 0) ? focusedWindowId! : groupWindowIds[0]

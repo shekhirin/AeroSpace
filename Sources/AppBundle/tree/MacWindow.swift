@@ -124,7 +124,10 @@ final class MacWindow: Window {
 
                     newActiveWindow.unbindFromParent()
                     newActiveWindow.bind(to: parent, adaptiveWeight: myWeight, index: myIndex)
-                    if remainingCount > 1 {
+                    if remainingCount == 1 {
+                        // Only 1 tab left - no longer a tab group
+                        TabGroupTracker.unregisterGroup(group)
+                    } else {
                         group.setActiveWindow(newActiveId)
                     }
                     return
@@ -132,6 +135,10 @@ final class MacWindow: Window {
             } else if remainingCount > 0 {
                 // This was a background tab - just remove it, no layout changes
                 _ = unbindFromParent()
+                if remainingCount == 1 {
+                    // Only 1 tab left - no longer a tab group
+                    TabGroupTracker.unregisterGroup(group)
+                }
                 return
             }
             // Last tab in group - fall through to normal handling
