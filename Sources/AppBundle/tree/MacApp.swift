@@ -63,6 +63,7 @@ final class MacApp: AbstractApp {
                     let axApp = AXUIElementCreateApplication(nsApp.processIdentifier)
                     let handlers: HandlerToNotifKeyMapping = [
                         (refreshObs, [kAXWindowCreatedNotification, kAXFocusedWindowChangedNotification]),
+                        (mainWindowChangedObs, [kAXMainWindowChangedNotification]),
                     ]
                     let job = RunLoopJob()
                     let subscriptions = (try? AxSubscription.bulkSubscribe(nsApp, axApp, job, handlers)) ?? []
@@ -318,6 +319,30 @@ final class MacApp: AbstractApp {
             CFRunLoopStop(CFRunLoopGetCurrent())
         }
         thread = nil // Disallow all future job submissions
+    }
+
+    func getTabGroupWindowIds() async throws -> [[UInt32]] {
+        try await thread?.runInLoop { [axApp] job in
+            var tabGroups: [[UInt32]] = []
+            guard let children = axApp.threadGuarded.get(Ax.childrenAttr) else { return tabGroups }
+            for child in children {
+                try job.checkCancellation()
+                let axChild = child.cast
+                guard let role = axChild.get(Ax.roleAttr), role == "AXTabGroup" else { continue }
+                guard let tabs = axChild.get(Ax.tabsAttr) else { continue }
+                var windowIds: [UInt32] = []
+                for tab in tabs {
+                    let axTab = tab.cast
+                    if let windowId = axTab.containingWindowId() {
+                        windowIds.append(windowId)
+                    }
+                }
+                if windowIds.count > 1 {
+                    tabGroups.append(windowIds)
+                }
+            }
+            return tabGroups
+        } ?? []
     }
 
     private func withWindow<T>(_ windowId: UInt32, _ body: @Sendable @escaping (AXUIElement, RunLoopJob) throws -> T?) async throws -> T? {

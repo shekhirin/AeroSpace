@@ -122,6 +122,8 @@ extension String {
                     case .windowIsFullscreen: .success(.bool(w.isFullscreen))
                     case .windowTitle: .success(.string(title))
                     case .windowLayout, .windowParentContainerLayout: toLayoutResult(w: w)
+                    case .windowTabGroupId: toTabGroupIdResult(w: w)
+                    case .windowTabGroupIsActive: toTabGroupIsActiveResult(w: w)
                 }
             case (.workspace(let w), .workspace(let f)):
                 return switch f {
@@ -183,4 +185,20 @@ private func toLayoutResult(w: Window) -> Result<Primitive, String> {
         case .rootTilingContainer: .failure("Not possible")
         case .shimContainerRelation: .failure("Window cannot have a shim container relation")
     }
+}
+
+@MainActor
+private func toTabGroupIdResult(w: Window) -> Result<Primitive, String> {
+    if let group = TabGroupTracker.getGroup(for: w.windowId) {
+        return .success(.string(group.id.uuidString))
+    }
+    return .success(.string(""))
+}
+
+@MainActor
+private func toTabGroupIsActiveResult(w: Window) -> Result<Primitive, String> {
+    if let group = TabGroupTracker.getGroup(for: w.windowId) {
+        return .success(.bool(group.activeWindowId == w.windowId))
+    }
+    return .success(.bool(false))
 }

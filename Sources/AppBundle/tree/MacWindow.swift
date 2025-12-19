@@ -85,6 +85,32 @@ final class MacWindow: Window {
             return
         }
         if !skipClosedWindowsCache { cacheClosedWindowIfNeeded() }
+
+        // Handle tab group: if this window is part of a tab group, promote another tab to take its place
+        if let group = TabGroupTracker.getGroup(for: windowId) {
+            TabGroupTracker.unregisterWindow(windowId)
+            if group.hasMultipleWindows && windowId == group.activeWindowId {
+                // This was the active tab being closed - promote another tab
+                if let newActiveId = group.windowIds.first,
+                   let newActiveWindow = MacWindow.allWindowsMap[newActiveId]
+                {
+                    let myIndex = ownIndex ?? 0
+                    let myWeight = (parent as? TilingContainer).map { getWeight($0.orientation) } ?? WEIGHT_AUTO
+                    let parent = unbindFromParent().parent
+
+                    newActiveWindow.unbindFromParent()
+                    newActiveWindow.bind(to: parent, adaptiveWeight: myWeight, index: myIndex)
+                    group.setActiveWindow(newActiveId)
+                    return
+                }
+            } else if group.hasMultipleWindows {
+                // This was a background tab - just remove it, no layout changes
+                _ = unbindFromParent()
+                return
+            }
+            // Last tab in group - fall through to normal handling
+        }
+
         let parent = unbindFromParent().parent
         let deadWindowWorkspace = parent.nodeWorkspace
         let focus = focus

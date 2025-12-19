@@ -287,6 +287,14 @@ enum Ax {
         key: kAXMinimizeButtonAttribute,
         getter: castToAxUiElementMock,
     )
+    static let tabsAttr = ReadableAttrImpl<[any AxUiElementMock]>(
+        key: kAXTabsAttribute,
+        getter: { ($0 as? NSArray)?.compactMap { castToAxUiElementMock($0 as AnyObject) } ?? [] },
+    )
+    static let childrenAttr = ReadableAttrImpl<[any AxUiElementMock]>(
+        key: kAXChildrenAttribute,
+        getter: { ($0 as? NSArray)?.compactMap { castToAxUiElementMock($0 as AnyObject) } ?? [] },
+    )
     //static let growAreaAttr = ReadableAttrImpl<AXUIElement>(
     //    key: kAXGrowAreaAttribute,
     //    getter: { ($0 as! AXUIElement) }

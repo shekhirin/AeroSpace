@@ -117,8 +117,34 @@ private func refresh() async throws {
         }
     }
 
+    // Detect and register tab groups
+    try await refreshTabGroups(mapping: mapping)
+
     // Garbage collect workspaces after apps, because workspaces contain apps.
     Workspace.garbageCollectUnusedWorkspaces()
+}
+
+@MainActor
+private func refreshTabGroups(mapping: [MacApp: [UInt32]]) async throws {
+    for (app, _) in mapping {
+        let tabGroups = try await app.getTabGroupWindowIds()
+        for windowIds in tabGroups {
+            guard let firstWindowId = windowIds.first else { continue }
+            if TabGroupTracker.getGroup(for: firstWindowId) != nil { continue }
+
+            let activeWindowId = try await app.getFocusedWindow()?.windowId ?? firstWindowId
+            let effectiveActiveId = windowIds.contains(activeWindowId) ? activeWindowId : firstWindowId
+            let group = TabGroup(activeWindowId: effectiveActiveId, windowIds: Set(windowIds))
+            TabGroupTracker.registerGroup(group)
+
+            for windowId in windowIds where windowId != effectiveActiveId {
+                if let window = MacWindow.allWindowsMap[windowId] {
+                    window.unbindFromParent()
+                    window.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+                }
+            }
+        }
+    }
 }
 
 func refreshObs(_ obs: AXObserver, ax: AXUIElement, notif: CFString, data: UnsafeMutableRawPointer?) {
@@ -127,6 +153,39 @@ func refreshObs(_ obs: AXObserver, ax: AXUIElement, notif: CFString, data: Unsaf
         if !TrayMenuModel.shared.isEnabled { return }
         scheduleRefreshSession(.ax(notif))
     }
+}
+
+func mainWindowChangedObs(_ obs: AXObserver, ax: AXUIElement, notif: CFString, data: UnsafeMutableRawPointer?) {
+    let notif = notif as String
+    guard let windowId = ax.containingWindowId() else { return }
+    Task { @MainActor in
+        if !TrayMenuModel.shared.isEnabled { return }
+        handleTabSwitch(newActiveWindowId: windowId)
+        scheduleRefreshSession(.ax(notif))
+    }
+}
+
+@MainActor
+func handleTabSwitch(newActiveWindowId: UInt32) {
+    guard let group = TabGroupTracker.getGroup(for: newActiveWindowId) else { return }
+    let oldActiveWindowId = group.activeWindowId
+    if oldActiveWindowId == newActiveWindowId { return }
+
+    guard let oldWindow = MacWindow.allWindowsMap[oldActiveWindowId] else { return }
+    guard let newWindow = MacWindow.allWindowsMap[newActiveWindowId] else { return }
+
+    guard let oldParent = oldWindow.parent else { return }
+
+    let oldIndex = oldWindow.ownIndex ?? 0
+    let oldAdaptiveWeight = (oldParent as? TilingContainer).map { oldWindow.getWeight($0.orientation) } ?? WEIGHT_AUTO
+
+    oldWindow.unbindFromParent()
+    oldWindow.bind(to: macosPopupWindowsContainer, adaptiveWeight: WEIGHT_AUTO, index: INDEX_BIND_LAST)
+
+    newWindow.unbindFromParent()
+    newWindow.bind(to: oldParent, adaptiveWeight: oldAdaptiveWeight, index: oldIndex)
+
+    group.setActiveWindow(newActiveWindowId)
 }
 
 enum OptimalHideCorner {
