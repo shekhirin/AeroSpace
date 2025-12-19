@@ -13,34 +13,26 @@
 
       version = "0.0.0-tabs";
 
-      # Use absolute path to the AeroSpace directory (requires --impure)
-      srcRoot = "/Users/shekhirin/projects/oss/AeroSpace";
+      # Use flake source - artifacts must be committed to the repo
+      # Run: nix develop -c ./build-release.sh
+      # Then commit: git add -f .release .man .shell-completion && git commit
+      releaseDir = "${self}/.release";
+      manDir = "${self}/.man";
+      shellCompletionDir = "${self}/.shell-completion";
 
-      # Import local directories into the Nix store
-      releaseDir = builtins.path {
-        path = builtins.toPath "${srcRoot}/.release";
-        name = "aerospace-release";
-      };
-
-      manDir = builtins.path {
-        path = builtins.toPath "${srcRoot}/.man";
-        name = "aerospace-man";
-      };
-
-      shellCompletionDir = builtins.path {
-        path = builtins.toPath "${srcRoot}/.shell-completion";
-        name = "aerospace-shell-completion";
-      };
+      # Build dependencies
+      buildDeps = with pkgs; [
+        ruby
+        fish
+        jdk21
+        python3
+        bashInteractive  # needed for `complete` builtin in shell-completion check
+      ];
     in
     {
       # Development shell with all build dependencies
       devShells.${system}.default = pkgs.mkShell {
-        buildInputs = with pkgs; [
-          ruby
-          fish
-          jdk21
-          python3
-        ];
+        buildInputs = buildDeps;
 
         shellHook = ''
           export JAVA_HOME=${pkgs.jdk21.home}
@@ -51,9 +43,10 @@
         default = self.packages.${system}.aerospace;
 
         # Package that installs from .release directory
-        # Usage:
-        #   1. ./build-release.sh (or: nix develop -c ./build-release.sh)
-        #   2. nix build .#aerospace --impure
+        # Artifacts must be committed to the repo first:
+        #   1. nix develop -c ./build-release.sh
+        #   2. git add -f .release .man .shell-completion
+        #   3. git commit -m "Build artifacts"
         aerospace = pkgs.runCommand "aerospace-${version}" {
           nativeBuildInputs = [ pkgs.installShellFiles ];
           meta = {
