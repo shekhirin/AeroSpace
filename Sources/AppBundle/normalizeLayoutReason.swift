@@ -12,6 +12,10 @@ func normalizeLayoutReason() async throws {
 private func validateStillPopups() async throws {
     for node in macosPopupWindowsContainer.children {
         let popup = (node as! MacWindow)
+        // Skip inactive tabs - they should stay in popup container
+        if let group = TabGroupTracker.getGroup(for: popup.windowId), group.activeWindowId != popup.windowId {
+            continue
+        }
         let windowLevel = getWindowLevel(for: popup.windowId)
         if try await popup.isWindowHeuristic(windowLevel) {
             try await popup.relayoutWindow(on: focus.workspace)
