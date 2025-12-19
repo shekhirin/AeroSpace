@@ -106,6 +106,13 @@ private func refresh() async throws {
     let mapping = try await MacApp.refreshAllAndGetAliveWindowIds(frontmostAppBundleId: NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
     let aliveWindowIds = mapping.values.flatMap { $0 }.toSet()
 
+    // Record info about windows being destroyed (for tab switch detection)
+    for window in MacWindow.allWindows {
+        if !aliveWindowIds.contains(window.windowId) {
+            await recordDestroyedWindowInfo(window)
+        }
+    }
+
     for window in MacWindow.allWindows {
         if !aliveWindowIds.contains(window.windowId) {
             window.garbageCollect(skipClosedWindowsCache: false)
@@ -122,6 +129,32 @@ private func refresh() async throws {
 
     // Garbage collect workspaces after apps, because workspaces contain apps.
     Workspace.garbageCollectUnusedWorkspaces()
+}
+
+@MainActor
+private func recordDestroyedWindowInfo(_ window: MacWindow) async {
+    guard let rect = try? await window.getAxRect() else { return }
+    guard let parent = window.parent else { return }
+
+    let parentInfo: DestroyedWindowInfo.ParentInfo?
+    switch parent.cases {
+        case .tilingContainer, .workspace:
+            let index = window.ownIndex ?? 0
+            let weight = (parent as? TilingContainer).map { window.getWeight($0.orientation) } ?? WEIGHT_AUTO
+            parentInfo = DestroyedWindowInfo.ParentInfo(parent: parent, index: index, adaptiveWeight: weight)
+        default:
+            parentInfo = nil
+    }
+
+    let info = DestroyedWindowInfo(
+        windowId: window.windowId,
+        appPid: window.app.pid,
+        position: rect.topLeftCorner,
+        size: rect.size,
+        timestamp: Date(),
+        parentInfo: parentInfo
+    )
+    RecentlyDestroyedWindows.record(info)
 }
 
 @MainActor

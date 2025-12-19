@@ -19,14 +19,32 @@ final class MacWindow: Window {
     static func getOrRegister(windowId: UInt32, macApp: MacApp) async throws -> MacWindow {
         if let existing = allWindowsMap[windowId] { return existing }
         let rect = try await macApp.getAxRect(windowId)
-        let data = try await unbindAndGetBindingDataForNewWindow(
-            windowId,
-            macApp,
-            isStartup
-                ? (rect?.center.monitorApproximation ?? mainMonitor).activeWorkspace
-                : focus.workspace,
-            window: nil,
-        )
+
+        // Check if this is a tab switch (new window at same position as recently destroyed one)
+        var isTabSwitch = false
+        let data: BindingData
+        if let rect,
+           let destroyedInfo = RecentlyDestroyedWindows.findMatch(
+               appPid: macApp.pid,
+               position: rect.topLeftCorner,
+               size: rect.size
+           ),
+           let parentInfo = destroyedInfo.parentInfo
+        {
+            // This is a tab switch - use the destroyed window's position in the tree
+            RecentlyDestroyedWindows.remove(windowId: destroyedInfo.windowId)
+            data = BindingData(parent: parentInfo.parent, adaptiveWeight: parentInfo.adaptiveWeight, index: parentInfo.index)
+            isTabSwitch = true
+        } else {
+            data = try await unbindAndGetBindingDataForNewWindow(
+                windowId,
+                macApp,
+                isStartup
+                    ? (rect?.center.monitorApproximation ?? mainMonitor).activeWorkspace
+                    : focus.workspace,
+                window: nil,
+            )
+        }
 
         // atomic synchronous section
         if let existing = allWindowsMap[windowId] { return existing }
@@ -34,8 +52,10 @@ final class MacWindow: Window {
         allWindowsMap[windowId] = window
 
         try await debugWindowsIfRecording(window)
-        if try await !restoreClosedWindowsCacheIfNeeded(newlyDetectedWindow: window) {
-            try await tryOnWindowDetected(window)
+        if !isTabSwitch {
+            if try await !restoreClosedWindowsCacheIfNeeded(newlyDetectedWindow: window) {
+                try await tryOnWindowDetected(window)
+            }
         }
         return window
     }

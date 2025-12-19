@@ -1,6 +1,54 @@
 import Common
 import Foundation
 
+struct DestroyedWindowInfo {
+    let windowId: UInt32
+    let appPid: Int32
+    let position: CGPoint
+    let size: CGSize
+    let timestamp: Date
+    let parentInfo: ParentInfo?
+
+    struct ParentInfo {
+        let parent: any NonLeafTreeNodeObject
+        let index: Int
+        let adaptiveWeight: CGFloat
+    }
+}
+
+@MainActor
+enum RecentlyDestroyedWindows {
+    private static var windows: [DestroyedWindowInfo] = []
+    private static let maxAge: TimeInterval = 0.5
+    private static let positionTolerance: CGFloat = 5.0
+    private static let sizeTolerance: CGFloat = 5.0
+
+    static func record(_ info: DestroyedWindowInfo) {
+        cleanup()
+        windows.append(info)
+    }
+
+    static func findMatch(appPid: Int32, position: CGPoint, size: CGSize) -> DestroyedWindowInfo? {
+        cleanup()
+        return windows.first { info in
+            info.appPid == appPid &&
+            abs(info.position.x - position.x) <= positionTolerance &&
+            abs(info.position.y - position.y) <= positionTolerance &&
+            abs(info.size.width - size.width) <= sizeTolerance &&
+            abs(info.size.height - size.height) <= sizeTolerance
+        }
+    }
+
+    static func remove(windowId: UInt32) {
+        windows.removeAll { $0.windowId == windowId }
+    }
+
+    private static func cleanup() {
+        let now = Date()
+        windows.removeAll { now.timeIntervalSince($0.timestamp) > maxAge }
+    }
+}
+
 @MainActor
 final class TabGroup {
     let id: UUID
