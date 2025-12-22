@@ -125,7 +125,9 @@ private func refresh() async throws {
     }
 
     // Detect and register tab groups
-    try await refreshTabGroups(mapping: mapping)
+    if config.experimentalNativeTabs {
+        try await refreshTabGroups(mapping: mapping)
+    }
 
     // Garbage collect workspaces after apps, because workspaces contain apps.
     Workspace.garbageCollectUnusedWorkspaces()
@@ -285,7 +287,9 @@ func mainWindowChangedObs(_ obs: AXObserver, ax: AXUIElement, notif: CFString, d
     guard let windowId = ax.containingWindowId() else { return }
     Task { @MainActor in
         if !TrayMenuModel.shared.isEnabled { return }
-        handleTabSwitch(newActiveWindowId: windowId)
+        if config.experimentalNativeTabs {
+            handleTabSwitch(newActiveWindowId: windowId)
+        }
         scheduleRefreshSession(.ax(notif))
     }
 }

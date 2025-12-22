@@ -107,7 +107,7 @@ final class MacWindow: Window {
         if !skipClosedWindowsCache { cacheClosedWindowIfNeeded() }
 
         // Handle tab group: if this window is part of a tab group, promote another tab to take its place
-        if let group = TabGroupTracker.getGroup(for: windowId) {
+        if config.experimentalNativeTabs, let group = TabGroupTracker.getGroup(for: windowId) {
             let wasActiveWindow = windowId == group.activeWindowId
             let remainingCount = group.windowIds.count - 1
 
