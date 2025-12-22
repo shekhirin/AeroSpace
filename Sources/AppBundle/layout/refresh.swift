@@ -106,15 +106,9 @@ private func refresh() async throws {
     let mapping = try await MacApp.refreshAllAndGetAliveWindowIds(frontmostAppBundleId: NSWorkspace.shared.frontmostApplication?.bundleIdentifier)
     let aliveWindowIds = mapping.values.flatMap { $0 }.toSet()
 
-    // Record info about windows being destroyed (for tab switch detection)
     for window in MacWindow.allWindows {
         if !aliveWindowIds.contains(window.windowId) {
             await recordDestroyedWindowInfo(window)
-        }
-    }
-
-    for window in MacWindow.allWindows {
-        if !aliveWindowIds.contains(window.windowId) {
             window.garbageCollect(skipClosedWindowsCache: false)
         }
     }
