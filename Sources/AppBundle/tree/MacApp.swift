@@ -321,14 +321,16 @@ final class MacApp: AbstractApp {
         thread = nil // Disallow all future job submissions
     }
 
-    func getTabGroupWindowIds() async throws -> [[UInt32]] {
+    func getTabGroupWindowIds() async throws -> (hasAxTabGroup: Bool, groups: [[UInt32]]) {
         try await thread?.runInLoop { [axApp] job in
             var tabGroups: [[UInt32]] = []
-            guard let children = axApp.threadGuarded.get(Ax.childrenAttr) else { return tabGroups }
+            var hasAxTabGroup = false
+            guard let children = axApp.threadGuarded.get(Ax.childrenAttr) else { return (false, tabGroups) }
             for child in children {
                 try job.checkCancellation()
                 let axChild = child.cast
                 guard let role = axChild.get(Ax.roleAttr), role == "AXTabGroup" else { continue }
+                hasAxTabGroup = true
                 guard let tabs = axChild.get(Ax.tabsAttr) else { continue }
                 var windowIds: [UInt32] = []
                 for tab in tabs {
@@ -341,8 +343,8 @@ final class MacApp: AbstractApp {
                     tabGroups.append(windowIds)
                 }
             }
-            return tabGroups
-        } ?? []
+            return (hasAxTabGroup, tabGroups)
+        } ?? (false, [])
     }
 
     private func withWindow<T>(_ windowId: UInt32, _ body: @Sendable @escaping (AXUIElement, RunLoopJob) throws -> T?) async throws -> T? {

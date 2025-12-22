@@ -160,8 +160,12 @@ private func recordDestroyedWindowInfo(_ window: MacWindow) async {
 @MainActor
 private func refreshTabGroups(mapping: [MacApp: [UInt32]]) async throws {
     // First try AXTabGroup-based detection
+    var appsWithAxTabGroup: Set<ObjectIdentifier> = []
     for (app, _) in mapping {
-        let tabGroups = try await app.getTabGroupWindowIds()
+        let (hasAxTabGroup, tabGroups) = try await app.getTabGroupWindowIds()
+        if hasAxTabGroup {
+            appsWithAxTabGroup.insert(ObjectIdentifier(app))
+        }
         for windowIds in tabGroups {
             guard let firstWindowId = windowIds.first else { continue }
             if TabGroupTracker.getGroup(for: firstWindowId) != nil { continue }
@@ -181,7 +185,8 @@ private func refreshTabGroups(mapping: [MacApp: [UInt32]]) async throws {
     }
 
     // Then try position-based detection for apps that don't expose AXTabGroup (like Ghostty)
-    try await detectTabGroupsByPosition(mapping: mapping)
+    let mappingWithoutAxTabGroupApps = mapping.filter { !appsWithAxTabGroup.contains(ObjectIdentifier($0.key)) }
+    try await detectTabGroupsByPosition(mapping: mappingWithoutAxTabGroupApps)
 }
 
 private let positionTolerance: CGFloat = 5.0
