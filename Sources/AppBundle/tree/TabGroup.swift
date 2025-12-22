@@ -20,8 +20,6 @@ struct DestroyedWindowInfo {
 enum RecentlyDestroyedWindows {
     private static var windows: [DestroyedWindowInfo] = []
     private static let maxAge: TimeInterval = 0.5
-    private static let positionTolerance: CGFloat = 5.0
-    private static let sizeTolerance: CGFloat = 5.0
 
     static func record(_ info: DestroyedWindowInfo) {
         cleanup()
@@ -32,10 +30,8 @@ enum RecentlyDestroyedWindows {
         cleanup()
         return windows.first { info in
             info.appPid == appPid &&
-            abs(info.position.x - position.x) <= positionTolerance &&
-            abs(info.position.y - position.y) <= positionTolerance &&
-            abs(info.size.width - size.width) <= sizeTolerance &&
-            abs(info.size.height - size.height) <= sizeTolerance
+            info.position == position &&
+            info.size == size
         }
     }
 

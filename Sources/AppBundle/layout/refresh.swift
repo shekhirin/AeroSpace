@@ -185,9 +185,6 @@ private func refreshTabGroups(mapping: [MacApp: [UInt32]]) async throws {
     try await detectTabGroupsByPosition(mapping: mappingWithoutAxTabGroupApps)
 }
 
-private let positionTolerance: CGFloat = 5.0
-private let sizeTolerance: CGFloat = 5.0
-
 @MainActor
 private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws {
     for (app, windowIds) in mapping {
@@ -199,7 +196,7 @@ private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws
             windowPositions.append((windowId, rect.topLeftCorner, rect.size))
         }
 
-        // Group windows that have the same position (within tolerance)
+        // Group windows that have the same position
         var processedIds: Set<UInt32> = []
         for i in 0..<windowPositions.count {
             let (windowId, position, size) = windowPositions[i]
@@ -212,11 +209,7 @@ private func detectTabGroupsByPosition(mapping: [MacApp: [UInt32]]) async throws
                 let (otherId, otherPos, otherSize) = windowPositions[j]
                 if processedIds.contains(otherId) { continue }
 
-                if abs(position.x - otherPos.x) <= positionTolerance &&
-                   abs(position.y - otherPos.y) <= positionTolerance &&
-                   abs(size.width - otherSize.width) <= sizeTolerance &&
-                   abs(size.height - otherSize.height) <= sizeTolerance
-                {
+                if position == otherPos && size == otherSize {
                     groupWindowIds.append(otherId)
                     processedIds.insert(otherId)
                 }
