@@ -1,0 +1,158 @@
+'\" t
+.\"     Title: aerospace-resize
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-RESIZE" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-resize \- Resize the focused window
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace resize [\-h|\-\-help] [\-\-window\-id <window\-id>] (smart|smart\-opposite|width|height) [+|\-]<number>
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Resize the focused window
+.sp
+The dimension to resize is chosen by the first argument
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRwidth\fP changes width
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRheight\fP changes height
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRsmart\fP changes width if the parent has horizontal orientation, and
+it changes height if the parent has vertical orientation
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRsmart\-opposite\fP resizes the opposite axis of smart
+.RE
+.sp
+Second argument controls how much the size changes
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+If the \f(CR<number>\fP is prefixed with \f(CR+\fP then the dimension is increased
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+If the \f(CR<number>\fP is prefixed with \f(CR\-\fP then the dimension is decreased
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+If the \f(CR<number>\fP is prefixed with neither \f(CR+\fP nor \f(CR\-\fP then the command changes the absolute value of the dimension
+.RE
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Act on the specified window instead of the focused window
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

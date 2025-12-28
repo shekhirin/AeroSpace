@@ -1,0 +1,87 @@
+'\" t
+.\"     Title: aerospace-summon-workspace
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-SUMMON\-WORKSPACE" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-summon-workspace \- Move the requested workspace to the focused monitor.
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace summon\-workspace [\-h|\-\-help] [\-\-fail\-if\-noop] <workspace>
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Move the requested workspace to the focused monitor.
+The moved workspace becomes focused.
+The behavior is identical to Xmonad.
+.sp
+The command makes sense only in multi\-monitor setup.
+In single monitor setup the command is identical to \f(CRworkspace\fP command.
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-fail\-if\-noop
+.RS 4
+Exit with non\-zero exit code if the workspace is already visible on the focused monitor.
+.RE
+.SH "ARGUMENTS"
+.sp
+<workspace>
+.RS 4
+The workspace to operate on.
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

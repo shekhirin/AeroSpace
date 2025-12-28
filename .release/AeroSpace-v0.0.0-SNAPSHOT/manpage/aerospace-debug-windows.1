@@ -1,0 +1,119 @@
+'\" t
+.\"     Title: aerospace-debug-windows
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-DEBUG\-WINDOWS" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-debug-windows \- Interactive command to record Accessibility API debug information to create bug reports
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace debug\-windows [\-h|\-\-help] [\-\-window\-id <window\-id>]
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Interactive command to record Accessibility API debug information to create bug reports
+.sp
+Use this command output to report bug reports about incorrect windows handling
+(e.g. some windows are floated when they shouldn\(cqt).
+.sp
+The intended usage is the following:
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 1." 4.2
+.\}
+Run the command to start the debug session recording
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 2." 4.2
+.\}
+Focus problematic window or make the window appear.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 3." 4.2
+.\}
+Run the command one more time to stop the debug session recording and print the results
+.RE
+.sp
+\f(CRdebug\-windows\fP command is \fBnot stable API\fP.
+Please \fBdon\(cqt rely on\fP the command existence and output format.
+The only intended use case is to report bugs about incorrect windows handling.
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Print debug information of the specified window right away.
+Usage of this flag disables interactive mode.
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

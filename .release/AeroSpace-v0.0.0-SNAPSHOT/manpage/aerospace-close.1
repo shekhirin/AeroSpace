@@ -1,0 +1,84 @@
+'\" t
+.\"     Title: aerospace-close
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-CLOSE" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-close \- Close the focused window
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace close [\-h|\-\-help] [\-\-quit\-if\-last\-window] [\-\-window\-id <window\-id>]
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Close the focused window
+.sp
+Normally, you don’t need to use this command, because macOS offers its own \f(CRcmd+w\fP binding.
+You might want to use the command from CLI for scripting purposes
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-quit\-if\-last\-window
+.RS 4
+Quit the app instead of closing if it\(cqs the last window of the app
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Act on the specified window instead of the focused window
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

@@ -1,0 +1,249 @@
+'\" t
+.\"     Title: aerospace-list-workspaces
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-LIST\-WORKSPACES" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-list-workspaces \- Print workspaces that satisfy conditions
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace list\-workspaces [\-h|\-\-help] \-\-monitor <monitor>... [\-\-visible [no]] [\-\-empty [no]] [\-\-format <output\-format>] [\-\-count] [\-\-json]
+aerospace list\-workspaces [\-h|\-\-help] \-\-all [\-\-format <output\-format>] [\-\-count] [\-\-json]
+aerospace list\-workspaces [\-h|\-\-help] \-\-focused [\-\-format <output\-format>] [\-\-count] [\-\-json]
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Print workspaces that satisfy conditions
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-format <output\-format>
+.RS 4
+Specify output format. See "Output Format" section for more details
+.RE
+.sp
+\-\-all
+.RS 4
+Alias for \f(CR\-\-monitor all\fP.
+Please use this option \fBwith caution\fP.
+Use it when you really need to get workspaces/windows from \fBall monitors\fP.
+.sp
+For multi\-monitor setup \f(CR\-\-monitor focused\fP is almost always a preferred option.
+If you\(cqre automating something then you don\(cqt want to mess up with workspaces/windows on a different monitor.
+.sp
+With great power comes great responsibility.
+.RE
+.sp
+\-\-focused
+.RS 4
+Alias for \f(CR\-\-monitor focused \-\-visible\fP.
+Always prints a single workspace
+.RE
+.sp
+\-\-monitor <monitors>
+.RS 4
+Filter results to only print workspaces/windows that are attached to specified monitors.
+\f(CR<monitors>\fP is a space separated list of monitor IDs.
+.br
+.sp
+Possible monitors IDs:
+.br
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 1." 4.2
+.\}
+1\-based index of a monitor as if monitors were ordered horizontally from left to right
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 2." 4.2
+.\}
+\f(CRall\fP is a special monitor ID that represents all monitors
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 3." 4.2
+.\}
+\f(CRmouse\fP is a special monitor ID that represents monitor with the mouse
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 4.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 4." 4.2
+.\}
+\f(CRfocused\fP is a special monitor ID that represents the focused monitor
+.RE
+.RE
+.sp
+\-\-visible [no]
+.RS 4
+Filter results to only print currently visible workspaces.
+\f(CR[no]\fP inverts the condition.
+Several workspaces can be visible in multi\-monitor setup
+.RE
+.sp
+\-\-empty [no]
+.RS 4
+Filter results to only print empty workspaces.
+\f(CR[no]\fP inverts the condition.
+.RE
+.sp
+\-\-format <output\-format>
+.RS 4
+Specify output format.
+See "Output Format" section for more details.
+Incompatible with \f(CR\-\-count\fP
+.RE
+.sp
+\-\-count
+.RS 4
+Output only the number of workspaces.
+Incompatible with \f(CR\-\-format\fP
+.RE
+.sp
+\-\-json
+.RS 4
+Output in JSON format.
+Can be used in combination with \f(CR\-\-format\fP to specify which data to include into the json.
+Incompatible with \f(CR\-\-count\fP
+.RE
+.SH "OUTPUT FORMAT"
+.sp
+Output format can be configured with optional \f(CR[\-\-format <output\-format>]\fP option.
+\f(CR<output\-format>\fP supports \c
+.URL "https://en.wikipedia.org/wiki/String_interpolation" "string interpolation" "."
+.sp
+If not specified, the default \f(CR<output\-format>\fP is:
+.br
+\f(CR%{workspace}\fP
+.sp
+The following variables can be used inside \f(CR<output\-format>\fP:
+.sp
+%{workspace}
+.RS 4
+String. Name of the belonging workspace
+.RE
+.sp
+%{workspace\-is\-focused}
+.RS 4
+Boolean. True if the workspace has focus
+.RE
+.sp
+%{workspace\-is\-visible}
+.RS 4
+Boolean. True if the workspace is visible. A workspace can be visible but not focused in a multi\-monitor setup
+.RE
+.sp
+%{workspace\-root\-container\-layout}
+.RS 4
+String. The layout (\f(CRv_tiles\fP, \f(CRh_tiles\fP, \f(CRv_accordion\fP, \f(CRh_accordion\fP) of the workspace\(cqs root container
+.RE
+.sp
+%{monitor\-id}
+.RS 4
+1\-based Number. Sequential number of the belonging monitor
+.RE
+.sp
+%{monitor\-appkit\-nsscreen\-screens\-id}
+.RS 4
+1\-based Number. Sequential number of the belonging monitor in \f(CRNSScreen.screens\fP. Useful for integration with other tools that might be using \f(CRNSScreen.screens\fP ordering (like sketchybar).
+.RE
+.sp
+%{monitor\-name}
+.RS 4
+String. Name of the belonging monitor
+.RE
+.sp
+%{monitor\-is\-main}
+.RS 4
+Boolean. True if the monitor is main.
+.RE
+.sp
+%{right\-padding}
+.RS 4
+A special variable which expands with a minimum number of spaces required to form a right padding in the appropriate column
+.RE
+.sp
+%{newline}
+.RS 4
+Unicode U+000A newline symbol \f(CR\(rsn\fP
+.RE
+.sp
+%{tab}
+.RS 4
+Unicode U+0009 tab symbol \f(CR\(rst\fP
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

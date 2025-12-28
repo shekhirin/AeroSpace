@@ -1,0 +1,132 @@
+'\" t
+.\"     Title: aerospace-split
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-SPLIT" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-split \- Split focused window
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace split [\-h|\-\-help] [\-\-window\-id <window\-id>] (horizontal|vertical|opposite)
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+\f(CRsplit\fP command exists solely for compatibility with i3.
+Unless you\(cqre hardcore i3 user who knows what they are doing, it\(cqs recommended to use \f(CRjoin\-with\fP
+.sp
+\fBIf the parent of focused window contains more than one child\fP, then the command
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 1.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 1." 4.2
+.\}
+Creates a new tiling container
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 2.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 2." 4.2
+.\}
+Replaces the focused window with the container
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04' 3.\h'+01'\c
+.\}
+.el \{\
+.  sp -1
+.  IP " 3." 4.2
+.\}
+Puts the focused window into the container as its only child
+.RE
+.sp
+The argument configures orientation of the newly created container.
+\f(CRopposite\fP means opposite orientation compared to the parent container.
+.sp
+\fBIf the parent of the focused window contains only a single child\fP (the window itself), then \f(CRsplit\fP command changes the orientation of the parent container
+.if n .sp
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+.B Important
+.ps -1
+.br
+.sp
+\f(CRsplit\fP command has no effect if \f(CRenable\-normalization\-flatten\-containers\fP is turned on.
+Consider using \f(CRjoin\-with\fP if you want to keep \f(CRenable\-normalization\-flatten\-containers\fP enabled
+.sp .5v
+.RE
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Act on the specified window instead of the focused window
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

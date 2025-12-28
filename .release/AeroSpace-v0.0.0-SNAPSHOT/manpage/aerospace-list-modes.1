@@ -1,0 +1,91 @@
+'\" t
+.\"     Title: aerospace-list-modes
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-LIST\-MODES" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-list-modes \- Print a list of modes currently specified in the configuration
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace list\-modes [\-h|\-\-help] [\-\-current] [\-\-count] [\-\-json]
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Print a list of modes currently specified in the configuration
+.sp
+See the guide for documentation about binding modes
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-current
+.RS 4
+Only print the currently active mode.
+Incompatible with \f(CR\-\-count\fP
+.RE
+.sp
+\-\-count
+.RS 4
+Output only the number of modes.
+Incompatible with \f(CR\-\-current\fP, \f(CR\-\-json\fP
+.RE
+.sp
+\-\-json
+.RS 4
+Output in JSON format.
+Incompatible with \f(CR\-\-count\fP
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

@@ -1,0 +1,121 @@
+'\" t
+.\"     Title: aerospace-move-node-to-workspace
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-MOVE\-NODE\-TO\-WORKSPACE" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-move-node-to-workspace \- Move the focused window to the specified workspace
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace move\-node\-to\-workspace [\-h|\-\-help] [\-\-focus\-follows\-window] [\-\-wrap\-around]
+                                 [\-\-stdin|\-\-no\-stdin]
+                                 (next|prev)
+aerospace move\-node\-to\-workspace [\-h|\-\-help] [\-\-focus\-follows\-window] [\-\-fail\-if\-noop]
+                                 [\-\-window\-id <window\-id>] <workspace\-name>
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Move the focused window to the specified workspace
+.sp
+\f(CR(next|prev)\fP is identical to \f(CRworkspace (next|prev)\fP
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-wrap\-around
+.RS 4
+Make it possible to jump between first and last workspaces using (next|prev)
+.RE
+.sp
+\-\-fail\-if\-noop
+.RS 4
+Exit with non\-zero code if move window to workspace it already belongs to
+.RE
+.sp
+\-\-focus\-follows\-window
+.RS 4
+Make sure that the window in question receives focus after moving.
+This flag is a shortcut for manually running \f(CRaerospace\-workspace\fP/\f(CRaerospace\-focus\fP after \f(CRmove\-node\-to\-workspace\fP successful execution.
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Act on the specified window instead of the focused window
+.RE
+.sp
+\-\-stdin
+.RS 4
+Read the list of workspaces from stdin.
+Incompatible with \f(CR\-\-no\-stdin\fP
+.RE
+.sp
+\-\-no\-stdin
+.RS 4
+Ignore the list of workspaces from stdin, even if provided.
+Incompatible with \f(CR\-\-stdin\fP
+.RE
+.SH "ARGUMENTS"
+.sp
+(next|prev)
+.RS 4
+Move window to next or prev workspace
+.RE
+.sp
+<workspace\-name>
+.RS 4
+Specifies workspace name where to move window to
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

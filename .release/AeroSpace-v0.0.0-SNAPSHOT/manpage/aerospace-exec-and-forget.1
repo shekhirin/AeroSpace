@@ -1,0 +1,100 @@
+'\" t
+.\"     Title: aerospace-exec-and-forget
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-EXEC\-AND\-FORGET" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-exec-and-forget \- Run /bin/bash \-c \*(Aq<bash\-script>\*(Aq
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace exec\-and\-forget <bash\-script>
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Run \f(CR/bin/bash \-c \*(Aq<bash\-script>\*(Aq\fP, and don\(cqt wait for the command termination.
+Stdout, stderr and exit code are ignored.
+.sp
+For example, you can use this command to launch applications:
+.sp
+.if n .RS 4
+.nf
+.fam C
+alt\-enter = \*(Aqexec\-and\-forget open \-n /System/Applications/Utilities/Terminal.app\*(Aq
+.fam
+.fi
+.if n .RE
+.sp
+\f(CR<bash\-script>\fP is passed "as is" to bash without any transformations and escaping. \f(CR<bash\-script>\fP is treated as suffix of the TOML string, it\(cqs not even an argument in classic CLI sense
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+The command is available in config
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+The command is \fBNOT\fP available in CLI
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

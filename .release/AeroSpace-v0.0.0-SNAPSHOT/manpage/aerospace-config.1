@@ -1,0 +1,182 @@
+'\" t
+.\"     Title: aerospace-config
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-CONFIG" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-config \- Query AeroSpace config options
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace config [\-h|\-\-help] \-\-get <name> [\-\-json] [\-\-keys]
+aerospace config [\-h|\-\-help] \-\-major\-keys
+aerospace config [\-h|\-\-help] \-\-all\-keys
+aerospace config [\-h|\-\-help] \-\-config\-path
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Query AeroSpace config options
+.sp
+For now, only \f(CRmode.*\fP config options are supported
+.sp
+Under the hood, the config is represented as recursive data structure of maps, arrays, strings, and integers.
+.sp
+Printing without \f(CR\-\-json\fP or \f(CR\-\-keys\fP flag is supported only for scalar types (strings and integers) and array of scalar types.
+Printing other complicated objects requires \f(CR\-\-json\fP or \f(CR\-\-keys\fP flag.
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-get <name>
+.RS 4
+Get the value for a given key. You can inspect available keys with \f(CR\-\-major\-keys\fP or \f(CR\-\-all\-keys\fP
+.RE
+.sp
+\-\-major\-keys
+.RS 4
+Print major keys
+.RE
+.sp
+\-\-all\-keys
+.RS 4
+Print all available keys recursively
+.RE
+.sp
+\-\-json
+.RS 4
+Print result in JSON format
+.RE
+.sp
+\-\-keys
+.RS 4
+Print keys of the complicated object (map or array)
+.RE
+.sp
+\-\-config\-path
+.RS 4
+Print absolute path to the loaded config
+.RE
+.SH "EXAMPLES"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+List all binding modes:
+.sp
+.if n .RS 4
+.nf
+.fam C
+$ aerospace config \-\-get mode \-\-keys
+main
+service
+.fam
+.fi
+.if n .RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+List all key bindings for \*(Aqmain\*(Aq binding mode:
+.sp
+.if n .RS 4
+.nf
+.fam C
+$ aerospace config \-\-get mode.main.binding \-\-keys
+alt\-1
+alt\-2
+\&...
+.fam
+.fi
+.if n .RE
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+List all key bindings for \*(Aqmain\*(Aq binding mode in JSON format:
+.sp
+.if n .RS 4
+.nf
+.fam C
+$ aerospace config \-\-get mode.main.binding \-\-json
+{
+  "alt\-w" : "workspace W",
+  "alt\-y" : "workspace Y",
+  "alt\-n" : "workspace N",
+  "alt\-shift\-e" : "move\-node\-to\-workspace E",
+  "alt\-shift\-m" : "move\-node\-to\-workspace M",
+  "alt\-shift\-t" : "move\-node\-to\-workspace T",
+\&...
+.fam
+.fi
+.if n .RE
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

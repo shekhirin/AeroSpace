@@ -1,0 +1,142 @@
+'\" t
+.\"     Title: aerospace-move-mouse
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-MOVE\-MOUSE" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-move-mouse \- Move mouse to the requested position
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace move\-mouse [\-h|\-\-help] [\-\-fail\-if\-noop] <mouse\-position>
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Move mouse to the requested position
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-fail\-if\-noop
+.RS 4
+Exit with non\-zero exit code if mouse is already at the requested position.
+The flag is compatible only with \f(CRwindow\-lazy\-center\fP and \f(CRmonitor\-lazy\-center\fP arguments.
+.RE
+.SH "ARGUMENTS"
+.sp
+<mouse\-position>
+.RS 4
+Position to move mouse to.
+Possible values:
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRmonitor\-lazy\-center\fP. Move mouse to the center of the focused monitor, \fBunless\fP it is already within the monitor boundaries.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRmonitor\-force\-center\fP. Move mouse to the center of the focused monitor.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRwindow\-lazy\-center\fP. Move mouse to the center of the focused window, \fBunless\fP it is already within the window boundaries. Exit with non\-zero code if no window is focused.
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+\f(CRwindow\-force\-center\fP. Move mouse to the center of the focused window. Exit with non\-zero code if no window is focused.
+.RE
+.RE
+.SH "EXAMPLES"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+Try to move mouse to the center of the window. If there is no window in focus, move mouse to the center of the monitor:
+.br
+\f(CRaerospace move\-mouse window\-lazy\-center || aerospace move\-mouse monitor\-lazy\-center\fP
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

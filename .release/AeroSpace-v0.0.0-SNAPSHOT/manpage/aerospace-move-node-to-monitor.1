@@ -1,0 +1,113 @@
+'\" t
+.\"     Title: aerospace-move-node-to-monitor
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-MOVE\-NODE\-TO\-MONITOR" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-move-node-to-monitor \- Move window to monitor targeted by relative direction, by order, or by pattern
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace move\-node\-to\-monitor [\-h|\-\-help] [\-\-window\-id <window\-id>] [\-\-focus\-follows\-window]
+                               [\-\-wrap\-around] (left|down|up|right|next|prev)
+aerospace move\-node\-to\-monitor [\-h|\-\-help] [\-\-window\-id <window\-id>] [\-\-focus\-follows\-window]
+                               [\-\-fail\-if\-noop] <monitor\-pattern>...
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Move window to monitor targeted by relative direction, by order, or by pattern
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-wrap\-around
+.RS 4
+Make it possible to wrap around the movement
+.RE
+.sp
+\-\-focus\-follows\-window
+.RS 4
+Make sure that the window in question receives focus after moving.
+This flag is a shortcut for manually running \f(CRaerospace\-workspace\fP/\f(CRaerospace\-focus\fP after \f(CRmove\-node\-to\-monitor\fP successful execution.
+.RE
+.sp
+\-\-fail\-if\-noop
+.RS 4
+Exit with non\-zero code if moving window to monitor it already belongs to
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Act on the specified window instead of the focused window
+.RE
+.SH "ARGUMENTS"
+.sp
+(left|down|up|right)
+.RS 4
+Move window to monitor in direction relative to the focused monitor
+.RE
+.sp
+(next|prev)
+.RS 4
+Move window to next|prev monitor in order they appear in tray icon
+.RE
+.sp
+<monitor\-pattern>...
+.RS 4
+Find the first matching monitor and move the window there.
+Multiple monitor patterns is useful for different monitor configurations.
+Monitor patterns follow the same format as in \f(CRworkspace\-to\-monitor\-force\-assignment\fP config option
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors
