@@ -1,50 +1,6 @@
 import Common
 import Foundation
 
-struct DestroyedWindowInfo {
-    let windowId: UInt32
-    let appPid: Int32
-    let position: CGPoint
-    let size: CGSize
-    let timestamp: Date
-    let parentInfo: ParentInfo?
-
-    struct ParentInfo {
-        let parent: any NonLeafTreeNodeObject
-        let index: Int
-        let adaptiveWeight: CGFloat
-    }
-}
-
-@MainActor
-enum RecentlyDestroyedWindows {
-    private static var windows: [DestroyedWindowInfo] = []
-    private static let maxAge: TimeInterval = 0.5
-
-    static func record(_ info: DestroyedWindowInfo) {
-        cleanup()
-        windows.append(info)
-    }
-
-    static func findMatch(appPid: Int32, position: CGPoint, size: CGSize) -> DestroyedWindowInfo? {
-        cleanup()
-        return windows.first { info in
-            info.appPid == appPid &&
-            info.position == position &&
-            info.size == size
-        }
-    }
-
-    static func remove(windowId: UInt32) {
-        windows.removeAll { $0.windowId == windowId }
-    }
-
-    private static func cleanup() {
-        let now = Date()
-        windows.removeAll { now.timeIntervalSince($0.timestamp) > maxAge }
-    }
-}
-
 @MainActor
 final class TabGroup {
     let id: UUID
@@ -72,20 +28,17 @@ final class TabGroup {
     }
 
     var isEmpty: Bool { windowIds.isEmpty }
-    var hasMultipleWindows: Bool { windowIds.count > 1 }
 }
 
 @MainActor
 enum TabGroupTracker {
     private static var windowIdToGroup: [UInt32: TabGroup] = [:]
-    private static var groups: [UUID: TabGroup] = [:]
 
     static func getGroup(for windowId: UInt32) -> TabGroup? {
         windowIdToGroup[windowId]
     }
 
     static func registerGroup(_ group: TabGroup) {
-        groups[group.id] = group
         for windowId in group.windowIds {
             windowIdToGroup[windowId] = group
         }
@@ -95,7 +48,10 @@ enum TabGroupTracker {
         guard let group = windowIdToGroup.removeValue(forKey: windowId) else { return }
         group.removeWindow(windowId)
         if group.isEmpty {
-            groups.removeValue(forKey: group.id)
+            // Remove all remaining references
+            for id in group.windowIds {
+                windowIdToGroup.removeValue(forKey: id)
+            }
         }
     }
 
@@ -103,7 +59,6 @@ enum TabGroupTracker {
         for windowId in group.windowIds {
             windowIdToGroup.removeValue(forKey: windowId)
         }
-        groups.removeValue(forKey: group.id)
     }
 
     static func addWindowToGroup(_ windowId: UInt32, group: TabGroup) {
