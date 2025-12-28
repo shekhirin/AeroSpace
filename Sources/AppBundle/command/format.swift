@@ -189,7 +189,7 @@ private func toLayoutResult(w: Window) -> Result<Primitive, String> {
 
 @MainActor
 private func toTabGroupIdResult(w: Window) -> Result<Primitive, String> {
-    if config.experimentalNativeTabs, let group = TabGroupTracker.getGroup(for: w.windowId) {
+    if w.app.isTabDetectionEnabled, let group = TabGroupTracker.getGroup(for: w.windowId) {
         return .success(.string(group.id.uuidString))
     }
     return .success(.string(""))
@@ -197,7 +197,7 @@ private func toTabGroupIdResult(w: Window) -> Result<Primitive, String> {
 
 @MainActor
 private func toTabGroupIsActiveResult(w: Window) -> Result<Primitive, String> {
-    if config.experimentalNativeTabs, let group = TabGroupTracker.getGroup(for: w.windowId) {
+    if w.app.isTabDetectionEnabled, let group = TabGroupTracker.getGroup(for: w.windowId) {
         return .success(.bool(group.activeWindowId == w.windowId))
     }
     return .success(.bool(false))

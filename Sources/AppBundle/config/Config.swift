@@ -59,7 +59,7 @@ struct Config: ConvenienceCopyable {
     var modes: [String: Mode] = [:]
     var onWindowDetected: [WindowDetectedCallback] = []
     var onModeChanged: [any Command] = []
-    var experimentalNativeTabs: Bool = false
+    var enableTabsForApps: Set<String> = []
 }
 
 enum DefaultContainerOrientation: String {

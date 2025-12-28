@@ -13,7 +13,7 @@ private func validateStillPopups() async throws {
     for node in macosPopupWindowsContainer.children {
         let popup = (node as! MacWindow)
         // Skip inactive tabs - they should stay in popup container
-        if config.experimentalNativeTabs,
+        if popup.app.isTabDetectionEnabled,
            let group = TabGroupTracker.getGroup(for: popup.windowId),
            group.activeWindowId != popup.windowId
         {

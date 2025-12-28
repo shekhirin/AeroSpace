@@ -119,7 +119,7 @@ private let configParser: [String: any ParserProtocol<Config>] = [
     "gaps": Parser(\.gaps, parseGaps),
     "workspace-to-monitor-force-assignment": Parser(\.workspaceToMonitorForceAssignment, parseWorkspaceToMonitorAssignment),
     "on-window-detected": Parser(\.onWindowDetected, parseOnWindowDetectedArray),
-    "experimental-native-tabs": Parser(\.experimentalNativeTabs, parseBool),
+    "enable-tabs-for-apps": Parser(\.enableTabsForApps, parseEnableTabsForApps),
 
     // Deprecated
     "non-empty-workspaces-root-containers-layout-on-startup": Parser(\._nonEmptyWorkspacesRootContainersLayoutOnStartup, parseStartupRootContainerLayout),
@@ -324,6 +324,10 @@ private func parseArrayOfStrings(_ raw: TOMLValueConvertible, _ backtrace: TomlB
                 parseString(elem, backtrace + .index(index))
             }
         }
+}
+
+private func parseEnableTabsForApps(_ raw: TOMLValueConvertible, _ backtrace: TomlBacktrace) -> ParsedToml<Set<String>> {
+    parseArrayOfStrings(raw, backtrace).map { Set($0) }
 }
 
 private func parseDefaultContainerOrientation(_ raw: TOMLValueConvertible, _ backtrace: TomlBacktrace) -> ParsedToml<DefaultContainerOrientation> {

@@ -41,6 +41,20 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
 automatically-unhide-macos-hidden-apps = false
 
+# Enable native tab detection for specific applications
+# Tab detection is disabled by default. Add app bundle IDs to enable.
+# The system automatically chooses the best detection method (AXTabGroup or position-based).
+# Use 'aerospace list-apps' to find app bundle IDs.
+# Fallback value (if you omit the key): enable-tabs-for-apps = []
+enable-tabs-for-apps = []
+
+# Example:
+# enable-tabs-for-apps = [
+#     'com.apple.Terminal',
+#     'com.mitchellh.ghostty',
+#     'dev.warp.Warp-Stable'
+# ]
+
 # List of workspaces that should stay alive even when they contain no windows,
 # even when they are invisible.
 # This config version is only available since 'config-version = 2'

@@ -119,8 +119,9 @@ private func refresh() async throws {
     }
 
     // Detect and register tab groups
-    if config.experimentalNativeTabs {
-        try await refreshTabGroups(mapping: mapping)
+    let mappingWithTabsEnabled = mapping.filter { $0.key.isTabDetectionEnabled }
+    if !mappingWithTabsEnabled.isEmpty {
+        try await refreshTabGroups(mapping: mappingWithTabsEnabled)
     }
 
     // Garbage collect workspaces after apps, because workspaces contain apps.
@@ -274,7 +275,8 @@ func mainWindowChangedObs(_ obs: AXObserver, ax: AXUIElement, notif: CFString, d
     guard let windowId = ax.containingWindowId() else { return }
     Task { @MainActor in
         if !TrayMenuModel.shared.isEnabled { return }
-        if config.experimentalNativeTabs {
+        if let window = MacWindow.allWindowsMap[windowId],
+           window.app.isTabDetectionEnabled {
             handleTabSwitch(newActiveWindowId: windowId)
         }
         scheduleRefreshSession(.ax(notif))

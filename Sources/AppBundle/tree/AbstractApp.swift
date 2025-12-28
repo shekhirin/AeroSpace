@@ -24,6 +24,12 @@ extension AbstractApp {
     func hash(into hasher: inout Hasher) {
         hasher.combine(pid)
     }
+
+    @MainActor
+    var isTabDetectionEnabled: Bool {
+        guard let bundleId = rawAppBundleId else { return false }
+        return config.enableTabsForApps.contains(bundleId)
+    }
 }
 
 extension Window {
