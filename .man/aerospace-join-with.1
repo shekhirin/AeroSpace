@@ -1,0 +1,120 @@
+'\" t
+.\"     Title: aerospace-join-with
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-JOIN\-WITH" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-join-with \- Put the focused window and the nearest node in the specified direction under a common parent container
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace join\-with [\-h|\-\-help] [\-\-window\-id <window\-id>] (left|down|up|right)
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Put the focused window and the nearest node in the specified direction under a common parent container
+.SH "EXAMPLES"
+.sp
+Given this layout
+.sp
+.if n .RS 4
+.nf
+.fam C
+h_tiles
+├── window 1
+├── window 2 (focused)
+└── window 3
+.fam
+.fi
+.if n .RE
+.sp
+\f(CRjoin\-with right\fP will result in the following layout
+.sp
+.if n .RS 4
+.nf
+.fam C
+h_tiles
+├── window 1
+└── v_tiles
+    ├── window 2 (focused)
+    └── window 3
+.fam
+.fi
+.if n .RE
+.if n .sp
+.RS 4
+.it 1 an-trap
+.nr an-no-space-flag 1
+.nr an-break-flag 1
+.br
+.ps +1
+.B Note
+.ps -1
+.br
+.sp
+\f(CRjoin\-with\fP is a high\-level replacement for i3\(cqs \c
+.URL "https://i3wm.org/docs/userguide.html#_splitting_containers" "split command" "."
+There is an observation that the only reason why you might want to split a node is to put several windows under a common "umbrella" parent. Unlike \f(CRsplit\fP, \f(CRjoin\-with\fP can be used with \f(CRenable\-normalization\-flatten\-containers\fP
+.sp .5v
+.RE
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Act on the specified window instead of the focused window
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

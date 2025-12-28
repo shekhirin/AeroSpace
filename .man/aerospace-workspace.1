@@ -1,0 +1,143 @@
+'\" t
+.\"     Title: aerospace-workspace
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-WORKSPACE" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-workspace \- Focus the specified workspace
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace workspace [\-h|\-\-help] [\-\-auto\-back\-and\-forth] [\-\-fail\-if\-noop] <workspace\-name>
+aerospace workspace [\-h|\-\-help] [\-\-wrap\-around] [\-\-stdin|\-\-no\-stdin] (next|prev)
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+\fB1. <workspace\-name> syntax\fP
+.sp
+Focus the specified workspace
+.sp
+\fB2. (next|prev) syntax\fP
+.sp
+Focuses next or previous workspace in \fBthe list\fP.
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+If \f(CR\-\-stdin\fP is specified, then \fBthe list\fP is taken from stdin
+.RE
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+Otherwise, \fBthe list\fP is defined as all workspaces on focused monitor in alphabetical order
+.RE
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-wrap\-around
+.RS 4
+Make it possible to jump between first and last workspaces using \f(CR(next|prev)\fP
+.RE
+.sp
+\-\-auto\-back\-and\-forth
+.RS 4
+Automatic \f(CRback\-and\-forth\fP when switching to already focused workspace.
+Incompatible with \f(CR\-\-fail\-if\-noop\fP
+.RE
+.sp
+\-\-fail\-if\-noop
+.RS 4
+Exit with non\-zero exit code if switch to the already focused workspace.
+Incompatible with \f(CR\-\-auto\-back\-and\-forth\fP
+.RE
+.sp
+\-\-stdin
+.RS 4
+Read the list of workspaces from stdin.
+Incompatible with \f(CR\-\-no\-stdin\fP
+.RE
+.sp
+\-\-no\-stdin
+.RS 4
+Ignore the list of workspaces from stdin, even if provided.
+Incompatible with \f(CR\-\-stdin\fP
+.RE
+.SH "EXAMPLES"
+.sp
+.RS 4
+.ie n \{\
+\h'-04'\(bu\h'+03'\c
+.\}
+.el \{\
+.  sp -1
+.  IP \(bu 2.3
+.\}
+Go to the next non empty workspace on the focused monitor:
+.br
+\f(CRaerospace list\-workspaces \-\-monitor focused \-\-empty no | aerospace workspace next\fP
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

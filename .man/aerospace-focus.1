@@ -1,0 +1,134 @@
+'\" t
+.\"     Title: aerospace-focus
+.\"    Author: [see the "AUTHOR(S)" section]
+.\" Generator: Asciidoctor 2.0.23
+.\"      Date: 2025-12-28
+.\"    Manual: AeroSpace Manual
+.\"    Source: AeroSpace
+.\"  Language: English
+.\"
+.TH "AEROSPACE\-FOCUS" "1" "2025-12-28" "AeroSpace" "AeroSpace Manual"
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.ss \n[.ss] 0
+.nh
+.ad l
+.de URL
+\fI\\$2\fP <\\$1>\\$3
+..
+.als MTO URL
+.if \n[.g] \{\
+.  mso www.tmac
+.  am URL
+.    ad l
+.  .
+.  am MTO
+.    ad l
+.  .
+.  LINKSTYLE blue R < >
+.\}
+.SH "NAME"
+aerospace-focus \- Set focus to a window.
+.SH "SYNOPSIS"
+.sp
+.nf
+aerospace focus [\-h|\-\-help] [\-\-ignore\-floating]
+                [\-\-boundaries <boundary>] [\-\-boundaries\-action <action>]
+                (left|down|up|right)
+aerospace focus [\-h|\-\-help] [\-\-ignore\-floating]
+                [\-\-boundaries <boundary>] [\-\-boundaries\-action <action>]
+                (dfs\-next|dfs\-prev)
+aerospace focus [\-h|\-\-help] \-\-window\-id <window\-id>
+aerospace focus [\-h|\-\-help] \-\-dfs\-index <dfs\-index>
+.fi
+.br
+.SH "DESCRIPTION"
+.sp
+Set focus to a window.
+.sp
+Contrary to i3, \f(CRfocus\fP command doesn\(cqt have a separate argument to focus floating windows.
+From \f(CRfocus\fP command perspective, floating windows are part of the tree.
+The floating window parent container is determined as the smallest tiling container that contains the center of the floating window.
+The technique eliminates the need for an additional binding for floating windows.
+This behavior can be disabled with \f(CR\-\-ignore\-floating\fP flag.
+.sp
+\f(CRfocus child|parent\fP isn\(cqt supported because the necessity of this operation is under the question.
+.URL "https://github.com/nikitabobko/AeroSpace/issues/5" "" ""
+.SH "OPTIONS"
+.sp
+\-h, \-\-help
+.RS 4
+Print help
+.RE
+.sp
+\-\-boundaries <boundary>
+.RS 4
+Defines focus boundaries.
+.br
+\f(CR<boundary>\fP possible values: \f(CR(workspace|all\-monitors\-outer\-frame)\fP.
+.br
+The default is: \f(CRworkspace\fP
+.RE
+.sp
+\-\-boundaries\-action <action>
+.RS 4
+Defines the behavior when requested to cross the \f(CR<boundary>\fP.
+.br
+\f(CR<action>\fP possible values: \f(CR(stop|fail|wrap\-around\-the\-workspace|wrap\-around\-all\-monitors)\fP.
+.br
+The default is: \f(CRstop\fP
+.RE
+.sp
+\-\-window\-id <window\-id>
+.RS 4
+Focus the window with specified \f(CR<window\-id>\fP
+.RE
+.sp
+\-\-dfs\-index <dfs\-index>
+.RS 4
+Focus window by its index, based on a depth\-first search (DFS) of the window within the workspace tree.
+Index is 0\-based.
+.RE
+.sp
+\-\-ignore\-floating
+.RS 4
+Don\(cqt perceive floating windows as part of the tree.
+It may be useful for more reliable scripting.
+.RE
+.SH "ARGUMENTS"
+.sp
+(left|down|up|right)
+.RS 4
+Set focus to the nearest window in the given direction.
+.RE
+.sp
+(dfs\-next|dfs\-prev)
+.RS 4
+Set focus to the window before or after the current window in the depth\-first order (top\-to\-bottom and left\-to\-right) of windows in the current workspace tree.
+In this mode, \f(CR\-\-boundaries\fP must be \f(CRworkspace\fP (the default) and \f(CR\-\-boundaries\-action\fP can be set to one of \f(CR(stop|fail|wrap\-around\-the\-workspace)\fP.
+.RE
+.SH "RESOURCES"
+.sp
+\fBProject homepage:\fP \c
+.URL "https://github.com/nikitabobko/AeroSpace" ""
+.br
+\fBGuide:\fP \c
+.URL "https://nikitabobko.github.io/AeroSpace/guide" ""
+.br
+.SH "BUGS"
+.sp
+Bugs can be reported to \c
+.URL "https://github.com/nikitabobko/AeroSpace/discussions/categories/potential\-bugs" "" ""
+.sp
+Maintainers will move verified bugs to \c
+.URL "https://github.com/nikitabobko/AeroSpace/issues" "" ""
+.SH "LICENSE"
+.sp
+Copyright \(co 2023 Nikita Bobko
+.br
+Free use of this software is granted under the terms of the MIT License
+.br
+You can find the full text of AeroSpace license and its dependencies in the \*(Aqlegal\*(Aq directory of the distributed zip archive.
+.SH "AUTHOR"
+.sp
+Nikita Bobko and contributors

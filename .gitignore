@@ -1,8 +1,6 @@
 /.idea
 /.debug
-/.shell-completion
 /.site
-/.man
 /Gemfile.lock
 # IDK, AppCode randomly creates this EMPTY file. I have no idea what this is
 /default.profraw
